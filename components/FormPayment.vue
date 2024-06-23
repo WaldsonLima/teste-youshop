@@ -134,7 +134,7 @@
 <script setup lang="ts" >
     import { ref } from 'vue';
     import { useStore } from 'vuex';
-    import { useRouter } from 'vue-router';
+    import { useRoute, useRouter } from 'vue-router';
 
     const router = useRouter()
     const store = useStore()
@@ -158,7 +158,8 @@
 
     const cepRules = [(value: string) => !!value || 'Você precisa inserir seu CEP'];
     const cpfRules = [(value: string) => !!value || 'Você precisa inserir seu CPF'];
-    
+
+    const offer_code = useRoute().path;
 
     async function getAdress() { 
         const data = await fetch(`https://viacep.com.br/ws/${cep.value}/json/`).then((r) => r.json())
@@ -189,7 +190,32 @@
         }
     }
 
+    // function isValidCPF(cpf: string) {
+    //     // Se não for string, o CPF é inválido
+    //     if (typeof cpf !== 'string') return false
+        
+    //     // Remove todos os caracteres que não sejam números
+    //     cpf = cpf.replace(/[^\d]+/g, '')
+        
+    //     // Se o CPF não tem 11 dígitos ou todos os dígitos são repetidos, o CPF é inválido
+    //     if (cpf.length !== 11 || !!cpf.match(/(\d)\1{10}/)) return false
+        
+    //     // Transforma de string para number[] com cada dígito sendo um número no array
+    //     cpf = cpf.split('').map(el => +el)
+        
+    //     // Cria uma função interna que calcula o dígito verificador do CPF atual:
+    //     const rest = (count) =>
+    //         // Pega os primeiros count dígitos
+    //         (cpf.slice(0, count-12)
+    //         // e calcula o dígito verificador de acordo com a fórmula da Receita Federal
+    //         .reduce( (soma, el, index) => (soma + el * (count-index)), 0 ) * 10 ) % 11 % 10
+            
+    //     // O CPF é válido se, e somente se, os dígitos verificadores estão corretos
+    //     return rest(10) === cpf[9] && rest(11) === cpf[10]
+    // }
+
     function confirmPayment() {
+        const data = store.state;
         if(cpf.value) {
             store.state.cpf = cpf.value;
             store.state.methodPayment = methodPayment.value;
@@ -205,6 +231,24 @@
             if(methodPayment.value === 'Boleto') {
                 setTimeout(() => {router.push({ path: '/boleto' })}, 200);
             }
+
+            fetch(`https://api.deepspacestore.com/offers${offer_code}/create_order`, {
+                method: 'POST',
+                body: JSON.stringify({ 
+                    name: data.name,
+                    email: data.email,
+                    phone: data.phone,
+                    cep: data.cep,
+                    complemento: data.complemento,
+                    logradouro: data.logradouro,
+                    bairro: data.bairro,
+                    localidade: data.localidade,
+                    uf: data.uf,
+                    cpf: data.cpf,
+                    methodPayment: data.methodPayment
+                    
+                })
+            })
         }
     }
 </script>

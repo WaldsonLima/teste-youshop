@@ -1,4 +1,12 @@
 <template>
+    <section class="offer-container">
+        <h1>Informações do produto:</h1>
+        <span>{{ product.name }}</span>
+        <span>{{ product.price }}</span>
+        <span>{{ product.items }}</span>
+        <span>{{ product.image }}</span>
+        <span>{{ product.offer_code }}</span>
+    </section>
     <v-form
         v-if="!isFormAdress"
         v-model="validUser"
@@ -63,6 +71,11 @@
 <script setup lang="ts" >
     import { ref } from 'vue';
     import { useStore } from 'vuex';
+    import { useRoute } from 'vue-router';
+
+    const offer_code = useRoute().path;
+    const response = await fetch(`https://api.deepspacestore.com/offers${offer_code}`)
+	const product = await response.json()
 
     const store = useStore()
     const validUser = ref(false)
@@ -104,5 +117,12 @@
         padding-left: 16px;
         padding-right: 16px;
         margin-top: 20px;
+    }
+
+    .offer-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
     }
 </style>
