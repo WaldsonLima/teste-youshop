@@ -156,8 +156,25 @@
     }
     const paymentForm = ref()
 
+    function isValidCpf(value: string) {
+        if (typeof value !== 'string') {
+            return false;
+        }
+        
+        value = value.replace(/[^\d]+/g, '');
+        
+        if (value.length !== 11 || !!value.match(/(\d)\1{10}/)) {
+            return false;
+        }
+
+        const values = value.split('').map(el => +el);
+        const rest = (count: any) => (values.slice(0, count-12).reduce( (soma, el, index) => (soma + el * (count-index)), 0 )*10) % 11 % 10;
+
+        return rest(10) === values[9] && rest(11) === values[10];
+    }
+
     const cepRules = [(value: string) => !!value || 'Você precisa inserir seu CEP'];
-    const cpfRules = [(value: string) => !!value || 'Você precisa inserir seu CPF'];
+    const cpfRules = [(value: string) => isValidCpf(value) || 'Insira um CPF válido'];
 
     const offer_code = useRoute().path;
 
@@ -190,33 +207,10 @@
         }
     }
 
-    // function isValidCPF(cpf: string) {
-    //     // Se não for string, o CPF é inválido
-    //     if (typeof cpf !== 'string') return false
-        
-    //     // Remove todos os caracteres que não sejam números
-    //     cpf = cpf.replace(/[^\d]+/g, '')
-        
-    //     // Se o CPF não tem 11 dígitos ou todos os dígitos são repetidos, o CPF é inválido
-    //     if (cpf.length !== 11 || !!cpf.match(/(\d)\1{10}/)) return false
-        
-    //     // Transforma de string para number[] com cada dígito sendo um número no array
-    //     cpf = cpf.split('').map(el => +el)
-        
-    //     // Cria uma função interna que calcula o dígito verificador do CPF atual:
-    //     const rest = (count) =>
-    //         // Pega os primeiros count dígitos
-    //         (cpf.slice(0, count-12)
-    //         // e calcula o dígito verificador de acordo com a fórmula da Receita Federal
-    //         .reduce( (soma, el, index) => (soma + el * (count-index)), 0 ) * 10 ) % 11 % 10
-            
-    //     // O CPF é válido se, e somente se, os dígitos verificadores estão corretos
-    //     return rest(10) === cpf[9] && rest(11) === cpf[10]
-    // }
-
-    function confirmPayment() {
+    async function confirmPayment() {
         const data = store.state;
-        if(cpf.value) {
+        const validCpf = isValidCpf(cpf.value);
+        if(validCpf) {
             store.state.cpf = cpf.value;
             store.state.methodPayment = methodPayment.value;
             
@@ -249,6 +243,8 @@
                     
                 })
             })
+        } else {
+            await paymentForm.value.validate()
         }
     }
 </script>
