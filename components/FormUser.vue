@@ -7,6 +7,10 @@
         <span>{{ product.image }}</span>
         <span>{{ product.offer_code }}</span>
     </section>
+    <div>
+        <span>Quantidade de vezes clicada: {{ numero }}</span>
+        <button @click="addNumero">addnumber</button>
+    </div>
     <v-form
         v-if="!isFormAdress"
         v-model="validUser"
@@ -97,6 +101,12 @@
 
             return isFormAdress.value = true
         }
+    }
+
+    const numero = ref(0);
+
+    function addNumero() {
+        numero.value++
     }
 
 </script>
