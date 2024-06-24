@@ -12,6 +12,12 @@ const vuetify = createVuetify({
 
 describe('import vue components', () => {
     test('normal imports as expected', async () => {
-
+        const wrapper = mount(FormPayment, {
+            global: {
+              plugins: [vuetify],
+            }
+        })
+        await wrapper.find('#paymentForm').trigger('submit')
+        expect(wrapper.find('#paymentForm').exists()).toBe(true)
     })
 })
