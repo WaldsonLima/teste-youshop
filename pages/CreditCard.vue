@@ -1,12 +1,10 @@
 <template>
     <main class="main__credit-card">
-        <span>Pagamento bem sucedido!</span>
+        <span class="title">
+            Pagamento bem sucedido!
+        </span>
     </main>
 </template>
-
-<script setup lang="ts">
-
-</script>
 
 <style scoped lang="scss">
     .main__credit-card {
@@ -15,5 +13,13 @@
         display: flex;
         justify-content: center;
         align-items: center;
+    }
+
+    .title {
+        font-size: 32px;
+        font-weight: 500;
+        color: #00020c;
+        text-align: center;
+        padding: 0 5%;
     }
 </style>

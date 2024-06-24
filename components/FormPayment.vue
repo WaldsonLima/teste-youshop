@@ -1,7 +1,8 @@
 <template>
     <v-form
-        v-model="validCep"
+        v-model="validForm"
         ref="paymentForm"
+        id="paymentForm"
         @submit.prevent="confirmPayment"
     >
         <v-container class="form__container">
@@ -15,6 +16,8 @@
                         label="CEP *"
                         required
                         :rules="cepRules"
+                        counter="8"
+                        ref="inputCep"
                         append-inner-icon="mdi-magnify"
                         @click:append-inner="getAdress"
                     />
@@ -112,8 +115,9 @@
                     <v-text-field
                         v-if="isFormPayment"
                         v-model="cpf"
-                        label="Digite seu CPF"
+                        label="Digite seu CPF *"
                         :rules="cpfRules"
+                        counter="11"
                         required
                         class="form__container__cpf-input"
                     />
@@ -124,6 +128,7 @@
                 class="form__container__continue-button"
                 type="submit"
                 color="#e2e2e2"
+                id="finalButton"
             >
                 Finalizar pedido
             </v-btn>
@@ -137,9 +142,10 @@
     import { useRoute, useRouter } from 'vue-router';
 
     const router = useRouter()
+    const route = useRoute()
     const store = useStore()
     const isFormPayment = ref(false)
-    const validCep = ref(false)
+    const validForm = ref(false)
     const cep = ref()
     const complemento = ref()
     const logradouroKey = ref(0)
@@ -157,13 +163,13 @@
     const paymentForm = ref()
 
     function isValidCpf(value: string) {
-        if (typeof value !== 'string') {
+        if(typeof value !== 'string') {
             return false;
         }
         
         value = value.replace(/[^\d]+/g, '');
         
-        if (value.length !== 11 || !!value.match(/(\d)\1{10}/)) {
+        if(value.length !== 11 || !!value.match(/(\d)\1{10}/)) {
             return false;
         }
 
@@ -173,10 +179,16 @@
         return rest(10) === values[9] && rest(11) === values[10];
     }
 
-    const cepRules = [(value: string) => !!value || 'Você precisa inserir seu CEP'];
-    const cpfRules = [(value: string) => isValidCpf(value) || 'Insira um CPF válido'];
+    function isValidCep(value: string) {
+        if(value.length === 8) {
+            return true
+        } else {
+            return false
+        }
+    }
 
-    const offer_code = useRoute().path;
+    const cepRules = [(value: string) => isValidCep(value) || 'Você precisa inserir seu CEP'];
+    const cpfRules = [(value: string) => isValidCpf(value) || 'Insira um CPF válido'];
 
     async function getAdress() { 
         const data = await fetch(`https://viacep.com.br/ws/${cep.value}/json/`).then((r) => r.json())
@@ -202,7 +214,8 @@
 
     async function showPaymentPage() {
         await paymentForm.value.validate()
-        if(cep.value && endereco) {
+        const validCep = isValidCep(cep.value);
+        if(validCep && endereco) {
             isFormPayment.value = true
         }
     }
@@ -226,7 +239,7 @@
                 setTimeout(() => {router.push({ path: '/boleto' })}, 200);
             }
 
-            fetch(`https://api.deepspacestore.com/offers${offer_code}/create_order`, {
+            fetch(`https://api.deepspacestore.com/offers${route.path}/create_order`, {
                 method: 'POST',
                 body: JSON.stringify({ 
                     name: data.name,
@@ -240,7 +253,6 @@
                     uf: data.uf,
                     cpf: data.cpf,
                     methodPayment: data.methodPayment
-                    
                 })
             })
         } else {

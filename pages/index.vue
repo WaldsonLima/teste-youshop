@@ -30,8 +30,7 @@
 							variant="outlined"
 							block
 							@click="showFormPage(product.offerCode)"
-						>
-						</v-btn>
+						/>
 					</v-card-actions>
 				</v-card>
 			</v-col>
@@ -40,10 +39,6 @@
 </template>
 
 <script setup lang="ts" >
-    function showFormPage(offerCode: string) {
-        navigateTo('/' + offerCode)
-    }
-
 	const products = [
 		{
 			title: "Monitoria de design",
@@ -76,6 +71,10 @@
 			offerCode: "39568"
 		},
 	]
+
+	function showFormPage(offerCode: string) {
+        navigateTo('/' + offerCode)
+    }
 </script>
 
 <style scoped lang="scss" >

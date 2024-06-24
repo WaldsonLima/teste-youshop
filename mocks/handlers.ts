@@ -8,8 +8,8 @@ export const handlers = [
         return HttpResponse.json({
             name: "Monitoria de design",
             price: "R$ 350,00",
-            items: "Essa monitoria conta com algumas coisas sobre design.",
-            image: "imagemzinha de design",
+            description: "Essa monitoria conta com algumas coisas sobre design.",
+            image: "https://www.dropbox.com/scl/fi/x07cfi4qiryxkxq86fsuj/ai-generated-8520565_1280.jpg?rlkey=cohsk8dpg5628tqgmkumyta6d&st=3zosx9ck&raw=1",
             offer_code: offer_code
         })
     }
@@ -18,8 +18,8 @@ export const handlers = [
         return HttpResponse.json({
             name: "Curso de Fron-End",
             price: "R$ 250,00",
-            items: "Esse curso conta com algumas coisas sobre design.",
-            image: "imagemzinha de front end",
+            description: "Esse curso conta com algumas coisas sobre design.",
+            image: "https://www.dropbox.com/scl/fi/x07cfi4qiryxkxq86fsuj/ai-generated-8520565_1280.jpg?rlkey=cohsk8dpg5628tqgmkumyta6d&st=3zosx9ck&raw=1",
             offer_code: offer_code
         })
     }
@@ -28,8 +28,8 @@ export const handlers = [
         return HttpResponse.json({
             name: "Curso de marketing",
             price: "R$ 500,00",
-            items: "Esse curso conta com algumas coisas sobre marketing.",
-            image: "imagemzinha de marketing",
+            description: "Esse curso conta com algumas coisas sobre marketing.",
+            image: "https://www.dropbox.com/scl/fi/x07cfi4qiryxkxq86fsuj/ai-generated-8520565_1280.jpg?rlkey=cohsk8dpg5628tqgmkumyta6d&st=3zosx9ck&raw=1",
             offer_code: offer_code
         })
     }
@@ -38,8 +38,8 @@ export const handlers = [
         return HttpResponse.json({
             name: "Guia de database",
             price: "R$ 400,00",
-            items: "Esse guia conta com algumas coisas sobre database.",
-            image: "imagemzinha de database",
+            description: "Esse guia conta com algumas coisas sobre database.",
+            image: "https://www.dropbox.com/scl/fi/x07cfi4qiryxkxq86fsuj/ai-generated-8520565_1280.jpg?rlkey=cohsk8dpg5628tqgmkumyta6d&st=3zosx9ck&raw=1",
             offer_code: offer_code
         })
     }
@@ -48,8 +48,8 @@ export const handlers = [
         return HttpResponse.json({
             name: "Curso de edição",
             price: "R$ 320,00",
-            items: "Esse curso conta com algumas coisas sobre edição.",
-            image: "imagemzinha de edição",
+            description: "Esse curso conta com algumas coisas sobre edição.",
+            image: "https://www.dropbox.com/scl/fi/x07cfi4qiryxkxq86fsuj/ai-generated-8520565_1280.jpg?rlkey=cohsk8dpg5628tqgmkumyta6d&st=3zosx9ck&raw=1",
             offer_code: offer_code
         })
     }
@@ -58,8 +58,8 @@ export const handlers = [
         return HttpResponse.json({
             name: "Monitoria de inglês",
             price: "R$ 980,00",
-            items: "Essa monitoria conta com algumas coisas sobre inglês.",
-            image: "imagemzinha de inglês",
+            description: "Essa monitoria conta com algumas coisas sobre inglês.",
+            image: "https://www.dropbox.com/scl/fi/x07cfi4qiryxkxq86fsuj/ai-generated-8520565_1280.jpg?rlkey=cohsk8dpg5628tqgmkumyta6d&st=3zosx9ck&raw=1",
             offer_code: offer_code
         })
     }
@@ -69,9 +69,5 @@ export const handlers = [
 
   http.post('https://api.deepspacestore.com/offers/:offer_code/create_order', async ({request}) => {
     const data = await request.json()
-    console.log(data)
-    return HttpResponse.json({
-
-    })
   }),
 ]

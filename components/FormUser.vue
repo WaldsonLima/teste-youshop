@@ -1,16 +1,21 @@
 <template>
-    <section class="offer-container">
-        <h1>Informações do produto:</h1>
-        <span>{{ product.name }}</span>
-        <span>{{ product.price }}</span>
-        <span>{{ product.items }}</span>
-        <span>{{ product.image }}</span>
-        <span>{{ product.offer_code }}</span>
+    <section class="product-datails">
+        <img
+            :src="product.image"
+            class="product-image"
+        >
+        <div class="content">
+            <h2 class="name">
+                {{ product.name }}
+            </h2>
+            <p class="price">
+                {{ product.price }}
+            </p>
+            <p class="description">
+                {{ product.description }}
+            </p>
+        </div>
     </section>
-    <div>
-        <span>Quantidade de vezes clicada: {{ numero }}</span>
-        <button @click="addNumero">addnumber</button>
-    </div>
     <v-form
         v-if="!isFormAdress"
         v-model="validUser"
@@ -25,7 +30,7 @@
                 >
                     <v-text-field
                         v-model="name"
-                        label="Nome Completo  *"
+                        label="Nome Completo *"
                         required
                         :rules="nameRules"
                     />
@@ -80,14 +85,12 @@
     const offer_code = useRoute().path;
     const response = await fetch(`https://api.deepspacestore.com/offers${offer_code}`)
 	const product = await response.json()
-
     const store = useStore()
     const validUser = ref(false)
     const name = ref()
     const email = ref()
     const phone = ref()
     const userForm = ref()
-
     const isFormAdress = ref(false)
     const nameRules = [(value: string) => !!value || 'Você precisa inserir o seu nome']
 
@@ -102,13 +105,6 @@
             return isFormAdress.value = true
         }
     }
-
-    const numero = ref(0);
-
-    function addNumero() {
-        numero.value++
-    }
-
 </script>
 
 <style scoped lang="scss" >
@@ -129,10 +125,52 @@
         margin-top: 20px;
     }
 
-    .offer-container {
+    .product-datails {
+        width: 90%;
+        margin: 20px auto;
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
+        justify-content: center;
         align-items: center;
+    }
+
+    .content {
+        width: 40%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start
+    }
+
+    .product-image {
+        width: 40%;
+    }
+
+    .name {
+        font-size: 32px;
+        font-weight: 600;
+        color: #00020c;
+    }
+
+    .price {
+        font-size: 42px;
+        font-weight: 500;
+        color: #059b00;
+    }
+
+    .description {
+        font-size: 16px;
+        font-weight: 400;
+        color: #353535;
+    }
+
+    @media (max-width: 820px) {
+        .content {
+            width: 100%;
+        }
+
+        .product-image {
+            width: 100%;
+        }
     }
 </style>
